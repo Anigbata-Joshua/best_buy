@@ -1,0 +1,10 @@
+Home page leson learnt
+1.  I use the useState method to attach a blue color to the fav icon on click. I achieved this by creating a const value for like and set it, decleared a const func  for the click event, and usinh teneray operators on the button
+NB:   const [liked, setLiked] = useState(false);
+    const toggleLike = () => {
+        setLiked(!liked)
+    }
+
+    Used layout structur for shop and admin
+
+    for the nav i created a category array with objects inside. Each object has an id, name and a submenu array for the ones with submenu
