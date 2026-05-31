@@ -21,24 +21,25 @@ function SignupForm() {
     const navigate = useNavigate();
     const merchant_id = localStorage.getItem("merchant_id");
 
+    const baseUrl = "http://ecommerce.reworkstaging.name.ng/v2/"
     async function handleSubmit(e) {
         e.preventDefault();
         setCheckValue(true);
 
-        // 1. Basic Validation
+        // Basic Validation
         if (!firstname || !lastname || !email || !password) {
             toast.error("All fields are required");
             return;
         }
 
-        // 2. Email Format Validation
+        // Email Format Validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             toast.error("Please enter a valid email address");
             return;
         }
 
-        // 3. Password Length Validation
+        // Password Length Validation
         if (password.length < 6) {
             toast.error("Password must be at least 6 characters long");
             return;
@@ -56,14 +57,14 @@ function SignupForm() {
         };
 
         try {
-            const response = await axios.post("http://ecommerce.reworkstaging.name.ng/v2/users", user_info);
+            const response = await axios.post(`${baseUrl}/user`, user_info);
             setLoading(false);
 
             if (response.status === 201 || response.status === 200) {
                 toast.success('User Created Successfully!');
-                const customerData = response.data;
+                const userData = response.data;
 
-                localStorage.setItem("bestbuy_customer", JSON.stringify(customerData));
+                localStorage.setItem("bestbuy_customer", JSON.stringify(userData));
 
                 setFirstName("");
                 setLastName("");
@@ -71,7 +72,7 @@ function SignupForm() {
                 setPassword("");
                 setCheckValue(false);
 
-                navigate("/loginUser");
+                navigate("/login-user");
             }
         } catch (err) {
             setLoading(false);
@@ -123,8 +124,6 @@ function SignupForm() {
                                 <input name="lastname" type="text" className="border border-gray-400 p-2.5 outline-none focus:ring-1 focus:ring-[#0046be] h-12" onChange={(e) => setLastName(e.target.value)} />
                                 {checkValue && !lastname && <p className="text-[10px] text-red-500 font-bold ml-1">This field can't be empty</p>}
                             </div>
-
-
 
                             <div className="flex flex-col">
                                 <label className="text-sm font-bold text-gray-800 mb-1">Email Address</label>

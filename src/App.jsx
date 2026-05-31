@@ -42,7 +42,7 @@ function App() {
             <Route path="product/:id" element={<Product />} />
           </Route>
             <Route path='signup' element ={<Signup/>} />
-            <Route path='loginUser' element ={<LoginUser/>} />
+            <Route path='login-user' element ={<LoginUser/>} />
 
           {/* Admin routes */}
           <Route path="admin" element={<AdminLayout />}>
