@@ -1,8 +1,8 @@
 import { Toaster } from 'react-hot-toast';
-// export default App;
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ShopLayout from './layouts/ShopLayout';
 import AdminLayout from './layouts/AdminLayout';
+;
 
 // Admin Pages
 import ViewUsers from './pages/admin/ViewUsers';
@@ -24,7 +24,7 @@ import Product from './pages/shop/Product';
 import Cart from "./pages/shop/Cart";
 import DataProvider from './context/DataContext';
 import Signup from './pages/shop/Signup';
-import LoginUser from "./pages/shop/LoginUser"
+import LoginUser from './pages/shop/Login-user';
 
 
 function App() {
@@ -41,21 +41,28 @@ function App() {
             <Route path="cart" element={<Cart />} />
             <Route path="product/:id" element={<Product />} />
           </Route>
-            <Route path='signup' element ={<Signup/>} />
-            <Route path='login-user' element ={<LoginUser/>} />
 
-          {/* Admin routes */}
-          <Route path="admin" element={<AdminLayout />}>
-            <Route index element={<MerchantDashboard />} />
-            <Route path="product-grid" element={<ProductGrid />} />
-            <Route path="users" element={<ViewUsers />} />
-            <Route path="view-product" element={<ViewProduct />} />
-            <Route path="create-user" element={<CreateUser />} />
-            <Route path="create-category" element={<Categories />} />
-            <Route path="create-products" element={<CreateProducts />} />
-            <Route path="register" element={<Register />} />
-            <Route path="login" element={<Login />} />
-          </Route>
+          {/* Shop routes without original nav and footer */}
+          <Route path='signup' element={<Signup />} />
+          <Route path='signin' element={<LoginUser />} />
+
+          {/* Admin routes that are not protected */}
+          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+
+          {/* Admin routes that are protected */}
+         
+            <Route path="admin" element={<AdminLayout />}>
+              <Route index element={<MerchantDashboard />} />
+              <Route path="product-grid" element={<ProductGrid />} />
+              <Route path="users" element={<ViewUsers />} />
+              <Route path="view-product" element={<ViewProduct />} />
+              <Route path="create-user" element={<CreateUser />} />
+              <Route path="create-category" element={<Categories />} />
+              <Route path="create-products" element={<CreateProducts />} />
+            </Route>
+
+
 
           <Route path="*" element={<div className='text-[70px] font-extrabold flex h-screen items-center justify-center '>404 - Page Not Found</div>} />
         </Routes>

@@ -15,15 +15,20 @@ const SignInForm = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [checkValue, setCheckValue] = useState(false);
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
-    const merchant_id = localStorage.getItem("merchant_id");
+    //grab merchant id from localStorage
+    const merchantID = localStorage.getItem("merchant_id");
+
+    const baseUrl = "http://ecommerce.reworkstaging.name.ng/v2"
+
     async function handleSubmit(e) {
         e.preventDefault();
         setCheckValue(true);
-
+        
+        //Basic validation
         if (!email || !password) {
-            toast.error("All fields are required");
+            toast.error("All fields must not be empty");
             return;
         }
 
@@ -43,21 +48,28 @@ const SignInForm = () => {
         const login_info = {
             email: email,
             password: password,
-            merchant_id: merchant_id
+            merchantID: merchantID
         };
 
         try {
-            const response = await axios.post("http://ecommerce.reworkstaging.name.ng/v2/users/login", login_info);
+            //Axios call
+            const response = await axios.post(`${baseUrl}/users/login`, login_info);
             setLoading(false);
 
             if (response.status === 201 || response.status === 200) {
                 toast.success('Login Successfully!');
+                console.log("Login response:", response.data);
 
-                // Reset form
-                setEmail(""); setPassword("");
+                localStorage.setItem("user_id", response.data.user_id);
+                localStorage.setItem("merchant_id", response.data.merchant_id);
+
+                // Reset form fields and navigate
+                setEmail("");
+                setPassword("");
                 setCheckValue(false);
                 navigate("/");
             }
+            //catch errors
         } catch (err) {
             setLoading(false);
             const errorMsg = err.response?.data?.msg || "An error occurred";

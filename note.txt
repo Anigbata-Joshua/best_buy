@@ -8,3 +8,5 @@ NB:   const [liked, setLiked] = useState(false);
     Used layout structur for shop and admin
 
     for the nav i created a category array with objects inside. Each object has an id, name and a submenu array for the ones with submenu
+
+    login devjoshbrandy@gmail.com Ajbrandy22

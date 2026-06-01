@@ -13,12 +13,11 @@ function ProductGrid() {
     useEffect(() => {
         fetchProducts();
     }, []);
-
+    const merchant_info = JSON.parse(localStorage.getItem("merchant_info"));
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const merchantId = localStorage.getItem("merchant_id" || "69ee63251595cbe810465591");
-
+            const merchantId = merchant_info.id
             if (!merchantId) {
                 toast.error("No merchant identity found!. Please log in or create a merchant.");
             }

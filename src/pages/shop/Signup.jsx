@@ -21,7 +21,7 @@ function SignupForm() {
     const navigate = useNavigate();
     const merchant_id = localStorage.getItem("merchant_id");
 
-    const baseUrl = "http://ecommerce.reworkstaging.name.ng/v2/"
+    const baseUrl = "http://ecommerce.reworkstaging.name.ng/v2"
     async function handleSubmit(e) {
         e.preventDefault();
         setCheckValue(true);
@@ -156,7 +156,7 @@ function SignupForm() {
                                 </p>
                             </div>
                             <div className='flex gap-2'>
-                                <CgProfile className='text-3xl' /> <span>Already have my Best Buy account? <br /><Link to="/loginUser" className='text-blue-800 font-bold flex items-center gap-4'>
+                                <CgProfile className='text-3xl' /> <span>Already have my Best Buy account? <br /><Link to="/signin" className='text-blue-800 font-bold flex items-center gap-4'>
                                     Sign in <span><IoIosArrowForward className='text-sm' /></span>
                                 </Link></span>
                             </div>

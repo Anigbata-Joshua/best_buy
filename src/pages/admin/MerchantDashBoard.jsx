@@ -131,12 +131,7 @@ function MerchantDashboard() {
                                                 </span>
                                             </td>
                                             <td className="p-4 text-center">
-                                                {/* <button
-                                                    onClick={() => handleDelete(product.id)}
-                                                    className="text-red-600 cursor-pointer flex items-center gap-1 mx-auto"
-                                                >
-                                                    <LuTrash2 size={16} /> Delete
-                                                </button> */}
+                                       
                                                 <button
                                                     onClick={() => { setItemToDelete(product.id); setShowDelete(true); }}
                                                     className="text-red-600 cursor-pointer flex items-center gap-1 mx-auto hover:underline"
