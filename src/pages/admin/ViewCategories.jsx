@@ -5,12 +5,13 @@ import { toast, Toaster } from 'react-hot-toast';
 import { LuPlus, LuFolder, LuTrash2, LuLayoutGrid } from "react-icons/lu";
 import Swal from 'sweetalert2';
 
-function ViewCategory(){
+function ViewCategory() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const base_url = "http://ecommerce.reworkstaging.name.ng/v2";
+    const { merchantId } = React.useContext(DataContent); // Get merchantId from context
 
+    const BASE_URL = "http://ecommerce.reworkstaging.name.ng/v2";
     useEffect(() => {
         fetchCategories();
     }, []);
@@ -20,16 +21,16 @@ function ViewCategory(){
 
         if (!merchantId) {
             toast.error("Session expired. Please login.");
-            navigate("/admin/login");
+            navigate("/login");
             return;
         }
 
         try {
             // GET request for the merchant
-            const response = await axios.get(`${base_url}/categories?merchant_id=${merchantId}`);
-            
-            // i it comes in array
-            const data = Array.isArray(response.data) ? response.data : [];
+            const response = await axios.get(`${BASE_URL}/categories?merchant_id=${merchantId}`);
+
+            // Api response
+            const data = response.data.data || response.data;
             setCategories(data);
         } catch (err) {
             console.error("Fetch error:", err);
@@ -40,41 +41,42 @@ function ViewCategory(){
     };
 
     const deleteCategory = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this category?")) 
+        if (!window.confirm("Are you sure you want to delete this category?"))
             return;
 
         try {
-            await axios.delete(`${base_url}/categories/${id}`);
+            await axios.delete(`${BASE_URL}/categories/${id}`);
             toast.success("Category deleted");
+            
             // Refresh the list
             setCategories(categories.filter(cat => cat.id !== id));
         } catch (err) {
             toast.error("Could not delete category.");
         }
     };
-    
 
-// const deleteCategory = async (id) => {
-//     const result = await Swal.fire({
-//         title: "Are you sure?",
-//         text: "You won't be able to revert this!",
-//         icon: "warning",
-//         showCancelButton: true,
-//         confirmButtonColor: "#2563eb", // Tailwind blue-600
-//         cancelButtonColor: "#ef4444",  // Tailwind red-500
-//         confirmButtonText: "Yes, delete it!"
-//     });
 
-//     if (result.isConfirmed) {
-//         try {
-//             await axios.delete(`${base_url}/categories/${id}`);
-//             Swal.fire("Deleted!", "Your category has been removed.", "success");
-//             setCategories(categories.filter(cat => cat.id !== id));
-//         } catch (err) {
-//             Swal.fire("Error!", "Could not delete category.", "error");
-//         }
-//     }
-// };
+    // const deleteCategory = async (id) => {
+    //     const result = await Swal.fire({
+    //         title: "Are you sure?",
+    //         text: "You won't be able to revert this!",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#2563eb", // Tailwind blue-600
+    //         cancelButtonColor: "#ef4444",  // Tailwind red-500
+    //         confirmButtonText: "Yes, delete it!"
+    //     });
+
+    //     if (result.isConfirmed) {
+    //         try {
+    //             await axios.delete(`${BASE_URL}/categories/${id}`);
+    //             Swal.fire("Deleted!", "Your category has been removed.", "success");
+    //             setCategories(categories.filter(cat => cat.id !== id));
+    //         } catch (err) {
+    //             Swal.fire("Error!", "Could not delete category.", "error");
+    //         }
+    //     }
+    // };
 
     return (
         <div className="min-h-screen bg-slate-50 p-6 md:p-10">
@@ -91,7 +93,7 @@ function ViewCategory(){
                         <p className="text-slate-500 mt-1">Manage the collections in your store.</p>
                     </div>
 
-                    <Link 
+                    <Link
                         to="/admin/create-category"
                         className="inline-flex items-center justify-center gap-2 bg-blue-600 cursor-pointer text-white font-bold py-3 px-6 rounded-sm"
                     >
@@ -112,7 +114,7 @@ function ViewCategory(){
                             <div key={category.id} className="bg-white rounded-sm border border-slate-100 p-5 group">
                                 <div className="w-full h-32 bg-slate-100 rounded-sm mb-4 overflow-hidden flex items-center justify-center">
                                     {category.image ? (
-                                        <img src={category.image} alt={category.name} className="w-full h-full object-cover cursor-pointer"/>
+                                        <img src={category.image} alt={category.name} className="w-full h-full object-cover cursor-pointer" />
                                     ) : (
                                         <LuFolder className="text-slate-300 w-12 h-12" />
                                     )}
@@ -120,7 +122,7 @@ function ViewCategory(){
                                 {/* delete section */}
                                 <div className="flex items-center justify-between">
                                     <h3 className="font-bold text-slate-700 text-lg truncate">{category.name}</h3>
-                                    <button onClick={() => deleteCategory(category.id)}className="p-2 text-red-500 cursor-pointer"title="Delete Category">
+                                    <button onClick={() => deleteCategory(category.id)} className="p-2 text-red-500 cursor-pointer" title="Delete Category">
                                         <LuTrash2 className='text-xl' />
                                     </button>
                                 </div>
@@ -138,7 +140,7 @@ function ViewCategory(){
                         <p className="text-slate-500 mt-2 max-w-sm mx-auto">
                             Creating your first category. It only takes a minute.
                         </p>
-                        <Link 
+                        <Link
                             to="/create-category"
                             className="mt-6 inline-block text-blue-600 font-bold hover:text-blue-700 underline underline-offset-4"
                         >

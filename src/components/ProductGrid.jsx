@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 import toast from "react-hot-toast";
+import { DataContent } from "../context/DataContext"; //Import useContext
 
 const BASE_URL = "http://ecommerce.reworkstaging.name.ng/v2";
 
@@ -10,63 +11,55 @@ function ProductGrid() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Usecontext instead of localStorage 
+    const { merchantId } = useContext(DataContent);
+
+    // Re-run fetch
     useEffect(() => {
-        fetchProducts();
-    }, []);
-    const merchant_info = JSON.parse(localStorage.getItem("merchant_info"));
+        if(merchantId) {
+            fetchProducts();
+        }
+    }, [merchantId]);
+
     const fetchProducts = async () => {
         setLoading(true);
+        setError(null);
+
         try {
-            const merchantId = merchant_info.id
+            //Use the global ID from context
+
             if (!merchantId) {
-                toast.error("No merchant identity found!. Please log in or create a merchant.");
+                toast.error("No merchant identity found!. Please log in.");
+                return;
             }
 
             const response = await axios.get(`${BASE_URL}/products`, {
                 params: {
                     merchant_id: merchantId,
-                    limit: 100 // Increased limit from 10 - 100
+                    limit: 100
                 }
             });
 
-            const apiData = response.data.data || response.data;
-            // console.log("API Response Data:", actualData);
+            // Cleanly check both formats the API might return the array in
+            const rawData = response.data;
 
-            const shopProduct = apiData.map((product) => ({
-                ...product,
-                id: product.id // To attach or get product id
+            const actualData = rawData.data;
+             console.log("API response for products:", actualData);
+
+            const shopProducts = actualData.map((products) => ({
+                ...products,
+                id: products.id
             }));
 
-            setProducts(shopProduct);
+            setProducts(shopProducts);
 
-            //Error field
         } catch (err) {
             console.error("Fetch error:", err);
             setError(err.message || "Failed to load products.");
         } finally {
             setLoading(false);
         }
-        const fetchAdminProducts = async () => {
-            try {
-                const merchantId = localStorage.getItem("merchant_id");
-                const response = await axios.get(`${BASE_URL}/products`, {
-                    params: { merchant_id: merchantId }
-                });
-
-                console.log("Full API Response:", response.data);
-
-                // This line checks every possible way the API might send the list
-                const rawData = response.data;
-                setProducts(rawData.data);
-
-            } catch (err) {
-                console.error("Fetch Error:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
     };
-
 
     const handleAddToCart = (product) => {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -80,33 +73,34 @@ function ProductGrid() {
         }
 
         localStorage.setItem("cart", JSON.stringify(cart));
-        toast.success(`${product.title} added to cart!`);
-        setLoading(false);
+        window.dispatchEvent(new Event("cartUpdated"));
+        toast.success(`${product.title || "Product"} added to cart!`);
     };
 
-    //To map through Categories
-    const categories = [...new Set(products.map(categoey_created => categoey_created.brand || "Uncategorized"))];
+    // Map through Categories safely using 'brand' property
+    const categories = [...new Set(products.map(category_created => category_created.brand || "Uncategorized"))];
 
     if (loading) return <div className="text-center mt-20 animate-pulse text-blue-600 font-bold">Loading Best Buy Deals...</div>;
-    if (error) return <div className="text-center mt-20 text-red-500 font-semibold">{error}</div>;
+    if (error) return <div className="text-center mt-20 text-red-500 font-bold text-3xl">{error}</div>;
 
     return (
         <div className="md:w-[73%] mx-auto mt-12 mb-20 space-y-20">
             {categories.map((cat) => {
-                //Filter products to et specific category
-                const filteredProducts = products.filter(categoey_created => (categoey_created.brand || "Uncategorized") == cat);
+                const filteredProducts = products.filter(category_created => (category_created.brand || "Uncategorized") == cat);
 
                 return (
                     <section key={cat}>
                         <div className="w-full mx-auto bg-gradient-to-r from-[#0046BE] to-[#009FBD] rounded-t-2xl p-6 shadow-lg">
-                            <h2 className="text-[32px] font-bold text-white capitalize">
-                                {cat} Deals
-                            </h2>
+                            <h2 className="text-[32px] font-bold text-white capitalize">{cat}</h2>
                         </div>
                         <div className="py-3">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6  ">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                 {filteredProducts.map((product) => (
-                                    <ProductCard key={product.id} product={product} onAddToCart={() => handleAddToCart(product)} />
+                                    <ProductCard
+                                        key={product.id}
+                                        product={product}
+                                        onAddToCart={() => handleAddToCart(product)}
+                                    />
                                 ))}
                             </div>
                         </div>

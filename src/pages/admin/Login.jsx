@@ -22,10 +22,10 @@ function MerchantLogin() {
         }
 
         setLoading(true);
-        const base_url = "http://ecommerce.reworkstaging.name.ng/v2";
+        const BASE_URL = "http://ecommerce.reworkstaging.name.ng/v2";
 
         try {
-            const resp = await axios.post(`${base_url}/merchants/login`, { email, password });
+            const resp = await axios.post(`${BASE_URL}/merchants/login`, { email, password });
 
             // Assuming API returns merchant object directly
             const merchant = resp.data;
@@ -33,6 +33,7 @@ function MerchantLogin() {
             if (merchant && merchant.id && merchant.email) {
                 toast.success("Login Successful");
                 localStorage.setItem("merchant_info", JSON.stringify({ id: merchant.id, email: merchant.email, first_name: merchant.first_name }));
+
                 setUser((prev) => ({ ...prev, id: merchant.id, email: merchant.email }));
                 navigate("/admin");
             } else {

@@ -4,6 +4,7 @@ import { LuPackage, LuUsers, LuShoppingCart, LuPlus, LuTrash2 } from "react-icon
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import HeroProps from "../../components/ShopComponents/HeroProps";
+import { DataContent } from "../../context/DataContext";
 
 const BASE_URL = "http://ecommerce.reworkstaging.name.ng/v2";
 
@@ -14,12 +15,12 @@ function MerchantDashboard() {
     const [loading, setLoading] = useState(true);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [showDelete, setShowDelete] = useState(false);
+    const { merchantId } = React.useContext(DataContent); // Get merchantId from context
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-           const merchant_info = JSON.parse(localStorage.getItem("merchant_info"));
-           const merchantId = merchant_info?.id;
+          
 
             try {
                 if (merchantId) {

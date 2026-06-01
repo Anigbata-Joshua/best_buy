@@ -3,6 +3,7 @@ import axios from "axios";
 import { LuPencil, LuTrash2, LuPlus } from "react-icons/lu";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { DataContent } from "../../context/DataContext";
 
 
 const BASE_URL = "http://ecommerce.reworkstaging.name.ng/v2";
@@ -13,6 +14,7 @@ function ViewProduct() {
     const [showDelete, setShowDelete] = useState(false);
     const [idToDelete, setIdToDelete] = useState(null);
     const navigate = useNavigate();
+    const { merchantId } = React.useContext(DataContent); // Get merchantId from context
 
     useEffect(() => {
         getAdminProducts();
@@ -20,12 +22,11 @@ function ViewProduct() {
 
     const getAdminProducts = async () => {
         try {
-            const merchantId = localStorage.getItem("merchant_id" || "69ee63251595cbe810465591");
             const res = await axios.get(`${BASE_URL}/products`, {
-                params: { merchant_id: merchantId , limit : 100}
+                params: {merchantId, limit: 100 }
             });
-            const data = res.data.data || res.data;
-            setProducts(data);
+            const productData = res.data.data || res.data;
+            setProducts(productData);
         } catch (err) {
             console.error("Error fetching products", err);
         } finally {
@@ -54,7 +55,7 @@ function ViewProduct() {
                         <h1 className="text-2xl font-bold text-gray-900">Products Catalog</h1>
                         <p className="text-sm text-gray-500">Manage your store inventory</p>
                     </div>
-                    <button onClick={()=> navigate("/admin/create-products")} className="bg-[#0046BE] cursor-pointer text-white p-3 rounded md:px-6 md:py-3 md:rounded-xl flex items-center gap-2 shadow-lg hover:bg-blue-700 transition-all">
+                    <button onClick={() => navigate("/admin/create-products")} className="bg-[#0046BE] cursor-pointer text-white p-3 rounded md:px-6 md:py-3 md:rounded-xl flex items-center gap-2 shadow-lg hover:bg-blue-700 transition-all">
                         <LuPlus size={20} /> <span className="hidden md:inline">Add Product</span>
                     </button>
                 </div>
@@ -64,18 +65,18 @@ function ViewProduct() {
                         products.map((product) => (
                             <div key={product.id} className="overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
                                 <div className="h-50">
-                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover py-4 "/>
+                                    <img src={product.image} alt={product.title} className="w-full h-full object-cover py-4 " />
                                     <div className=" px-4 rounded-sm text-[14px] font-bold uppercase text-gray-600 mb-2">
                                         {product.category?.name || "General"}
                                     </div>
                                 </div>
-                                
+
                                 <div className="p-4 mt-3">
                                     <h3 className="font-semibold text-gray-800 truncate">{product.title}</h3>
                                     <p className="text-[#0046BE] font-bold mt-1">₦{(product.price).toLocaleString()}</p>
-                                    
+
                                     <div className="flex items-center justify-between mt-4 pt-4">
-                                        <button onClick={() => { setIdToDelete(product.id); setShowDelete(true); }}className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer">
+                                        <button onClick={() => { setIdToDelete(product.id); setShowDelete(true); }} className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer">
                                             <LuTrash2 size={22} />
                                         </button>
                                     </div>
@@ -100,7 +101,7 @@ function ViewProduct() {
                             <button onClick={() => setShowDelete(false)} className="flex-1 py-2 text-gray-600 font-medium hover:bg-gray-50 rounded-xl border border-gray-200 transition cursor-pointer">
                                 Cancel
                             </button>
-                            <button  onClick={() => handleDelete(idToDelete)} className="flex-1 py-2 bg-red-600 text-white font-medium hover:bg-red-700 rounded-xl transition cursor-pointer">
+                            <button onClick={() => handleDelete(idToDelete)} className="flex-1 py-2 bg-red-600 text-white font-medium hover:bg-red-700 rounded-xl transition cursor-pointer">
                                 Delete
                             </button>
                         </div>
