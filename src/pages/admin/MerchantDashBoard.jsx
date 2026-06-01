@@ -18,14 +18,15 @@ function MerchantDashboard() {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const merchantId = localStorage.getItem("merchant_id");
+           const merchant_info = JSON.parse(localStorage.getItem("merchant_info"));
+           const merchantId = merchant_info?.id;
 
             try {
                 if (merchantId) {
                     const prodRes = await axios.get(`${BASE_URL}/products?merchant_id=${merchantId}`, {
                         params: {
-                            merchant_id: merchantId,
-                             limit: 100 // Increased limit from 10 - 100
+                            merchantId,
+                            limit: 100 // Increased limit from 10 - 100
                         }
                     });
                     setProducts(prodRes.data.data || prodRes.data || []);

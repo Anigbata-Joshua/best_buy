@@ -29,14 +29,15 @@ function ProductGrid() {
                 }
             });
 
-            const actualData = response.data.data || response.data;
+            const apiData = response.data.data || response.data;
+            // console.log("API Response Data:", actualData);
 
-            const normalized = actualData.map((prodts) => ({
-                ...prodts,
-                id: prodts.id || prodts._id,// To attach or get prodts id
+            const shopProduct = apiData.map((product) => ({
+                ...product,
+                id: product.id // To attach or get product id
             }));
 
-            setProducts(normalized);
+            setProducts(shopProduct);
 
             //Error field
         } catch (err) {
@@ -48,19 +49,16 @@ function ProductGrid() {
         const fetchAdminProducts = async () => {
             try {
                 const merchantId = localStorage.getItem("merchant_id");
-                const res = await axios.get(`${BASE_URL}/products`, {
+                const response = await axios.get(`${BASE_URL}/products`, {
                     params: { merchant_id: merchantId }
                 });
 
-                console.log("Full API Response:", res.data);
+                console.log("Full API Response:", response.data);
 
                 // This line checks every possible way the API might send the list
-                const rawData = res.data;
-                const finalArray = Array.isArray(rawData)
-                    ? rawData
-                    : (rawData.data || rawData.products || []);
+                const rawData = response.data;
+                setProducts(rawData.data);
 
-                setProducts(finalArray);
             } catch (err) {
                 console.error("Fetch Error:", err);
             } finally {
@@ -82,8 +80,8 @@ function ProductGrid() {
         }
 
         localStorage.setItem("cart", JSON.stringify(cart));
-        window.dispatchEvent(new Event("cartUpdated"));
         toast.success(`${product.title} added to cart!`);
+        setLoading(false);
     };
 
     //To map through Categories
