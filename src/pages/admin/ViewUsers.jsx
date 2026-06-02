@@ -35,7 +35,7 @@ const AdminUserList = () => {
             try {
                 // Actual DELETE request to the backend
                 await axios.delete(`${base_url}/users/${id}`);
-                
+
                 alert("User removed successfully");
                 setUsers(users.filter(user => user.id !== id));
             } catch (err) {
@@ -73,9 +73,9 @@ const AdminUserList = () => {
                             {loading ? (
                                 <tr>
                                     <td colSpan="4" className="p-20 text-center">
-                                        <div className="flex flex-col items-center gap-2">
-                                            <div className="w-6 h-6 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Syncing Database...</span>
+                                        <div className="flex flex-col gap-4 justify-center items-center  w-full bg-gray-50">
+                                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+                                            <p className="font-bold text-gray-500">Loading Users...</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -96,8 +96,8 @@ const AdminUserList = () => {
                                             {user.phone || 'N/A'}
                                         </td>
                                         <td className="px-6 py-5 text-center">
-                                            <button 
-                                                onClick={() => deleteUser(user.id)} 
+                                            <button
+                                                onClick={() => deleteUser(user.id)}
                                                 className="text-[10px] font-bold text-red-400 uppercase tracking-widest"
                                             >
                                                 delete

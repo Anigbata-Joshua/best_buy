@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import axios from "axios";
 import { LuPackage, LuUsers, LuShoppingCart, LuPlus, LuTrash2 } from "react-icons/lu";
 import { Link } from "react-router-dom";
@@ -15,23 +15,27 @@ function MerchantDashboard() {
     const [loading, setLoading] = useState(true);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [showDelete, setShowDelete] = useState(false);
-    const { merchantId } = React.useContext(DataContent); // Get merchantId from context
+    const { merchantId, loading: contextLoading } = React.useContext(DataContent); // Get merchantId from context
 
     useEffect(() => {
+        if (contextLoading) return;
+        if (!merchantId) {
+            setProducts([]);
+            setLoading(false);
+            return;
+        }
+
         const fetchData = async () => {
             setLoading(true);
-          
 
             try {
-                if (merchantId) {
-                    const prodRes = await axios.get(`${BASE_URL}/products?merchant_id=${merchantId}`, {
-                        params: {
-                            merchantId,
-                            limit: 100 // Increased limit from 10 - 100
-                        }
-                    });
-                    setProducts(prodRes.data.data || prodRes.data || []);
-                }
+                const prodRes = await axios.get(`${BASE_URL}/products`, {
+                    params: {
+                        merchant_id: merchantId,
+                        limit: 100 // Increased limit from 10 - 100
+                    }
+                });
+                setProducts(prodRes.data.data || prodRes.data || []);
 
                 const userRes = await axios.get(`${BASE_URL}/users`);
                 setTotalUsers(userRes.data.length || 0);
@@ -51,7 +55,7 @@ function MerchantDashboard() {
         };
 
         fetchData();
-    }, []);
+    }, [merchantId, contextLoading]);
 
 
     const handleDelete = async (productId) => {

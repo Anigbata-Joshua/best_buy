@@ -140,14 +140,14 @@ function RegisterMerchant() {
                     )}
 
                     <button disabled={loading} type="submit"
-                        className="w-full bg-blue-950 hover:bg-black text-white font-bold py-4 rounded-xl tracking-widest uppercase text-xs transition-all shadow-lg disabled:opacity-50">
+                        className="w-full bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-xl tracking-widest uppercase text-xs transition-all shadow-lg disabled:opacity-50">
                         {loading ? "Registering..." : "Create Merchant Account"}
                     </button>
                 </form>
 
                 <p className="mt-10 text-center text-slate-400 text-sm">
                     Already have an account?
-                    <Link to="/admin/login" className="text-blue-600 font-bold ml-2 hover:underline">Log In</Link>
+                    <Link to="/login" className="text-blue-600 font-bold ml-2 hover:underline">Log In</Link>
                 </p>
             </div>
         </div>

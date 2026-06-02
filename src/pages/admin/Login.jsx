@@ -89,7 +89,7 @@ function MerchantLogin() {
 
                 <p className="mt-8 text-center text-slate-400 text-sm">
                     Don't have an account?
-                    <Link to="/admin/register" className="text-blue-600 font-bold ml-2 hover:underline">
+                    <Link to="/register" className="text-blue-600 font-bold ml-2 hover:underline">
                         Sign Up
                     </Link>
                 </p>

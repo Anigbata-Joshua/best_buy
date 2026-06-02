@@ -167,7 +167,7 @@ const handleCreateOrUpdateCategory = async (e) => {
                         </div>
 
                         <div className="flex gap-2">
-                            <button type="submit" disabled={loading} className="flex-1 bg-black text-white font-bold py-3 cursor-pointer rounded-sm disabled:opacity-50">
+                            <button type="submit" disabled={loading} className="flex-1 bg-black text-white font-bold py-3 cursor-pointer rounded-xl disabled:opacity-50">
                                 {/* tinary operators */}
                                 {loading ? "Saving..." : editCategoryId ? "Update Category" : "Create Category"}
                             </button>

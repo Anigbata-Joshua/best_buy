@@ -14,9 +14,10 @@ const CartPage = () => {
     }, []);
 
     const formatPrice = (price) => {
-        if (typeof price === "number") return price;
-        const cleanedPrice = String(price || "0").replace(/[^\d.]/g, "");
-        return parseFloat(cleanedPrice) || 0;
+        if (typeof price === "number")
+            return price;
+        const cleanedPrice = price.replace(/[^0-9.]/g, ""); // Remove non-numeric characters except decimal point
+        return parseFloat(cleanedPrice) || 0; // Convert to number, default to 0
     };
 
     const updateQuantity = (id, newQty) => {
@@ -26,7 +27,7 @@ const CartPage = () => {
         setCartItems(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
     };
-    
+
     const handleDelete = (id) => {
         // Filter out the item from the current cartItems state
         const updatedCart = cartItems.filter(item => item.id !== id);
@@ -34,6 +35,7 @@ const CartPage = () => {
 
         // Update localStorage so the change persists
         localStorage.setItem("cart", JSON.stringify(updatedCart));
+        setShowDelete(false);
 
         // Relaod window
         window.dispatchEvent(new Event("cartUpdated"));
@@ -73,7 +75,7 @@ const CartPage = () => {
                                             <div className="flex flex-col md:flex-row gap-4">
                                                 {/* Image */}
                                                 <div className="w-20 h-20 shrink-0">
-                                                    <img src={item.images?.[0] || item.image} alt="" className="w-full h-full object-contain" />
+                                                    <img src={item.images?.[0] || item.image} alt="Product Image" className="w-full h-full object-contain" />
                                                 </div>
 
                                                 {/* Title & Shipping */}
@@ -99,16 +101,18 @@ const CartPage = () => {
                                                     <div className="flex flex-col items-center">
                                                         <select value={item.quantity} onChange={(e) => updateQuantity(item.id, Number(e.target.value))}
                                                             className="border border-gray-400 rounded p-1 text-[13px] w-16 bg-white outline-none">
-                                                            {[...Array(5)].map((_, i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)}
+                                                            {[...Array(10).keys()].map(num => (
+                                                                <option key={num + 1} value={num + 1}>{num + 1}</option>
+                                                            ))}
                                                         </select>
                                                         <button className="text-[#0046be] text-[11px] mt-2 hover:underline">Save for later</button>
-                                                        <button onClick={() => { setItemToDelete(item.id); setShowDelete(true); }} className="text-[#0046be] text-[11px] mt-1 hover:underline cursor-pointer">Remove</button>
+                                                        <button onClick={() => { setItemToDelete(item.id); setShowDelete(true); }} className="text-red-600 text-[12px] mt-1 hover:underline cursor-pointer">Remove</button>
                                                     </div>
 
                                                     <div className="text-right min-w-[80px]">
                                                         <p className="text-[17px] font-bold">₦{rowTotal.toLocaleString()}</p>
                                                         <div className="bg-[#bb0628] text-white text-[10px] font-bold px-1 py-0.5 inline-block mt-1">
-                                                            SAVE ₦{unitPrice * 0.15}
+                                                            SAVE ₦{Math.floor(unitPrice * 0.09 * item.quantity).toLocaleString()}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -165,7 +169,7 @@ const CartPage = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <button className="w-full bg-[#fff200] hover:bg-[#ffe000] py-3 rounded font-bold text-[15px] transition-colors shadow-sm">
+                                <button className="w-full bg-[#fff200] hover:bg-[#ffe000] py-3 cursor-pointer rounded font-bold text-[15px] transition-colors shadow-sm">
                                     Checkout
                                 </button>
                                 <button className="w-full bg-[#111] hover:bg-black py-2 rounded flex items-center justify-center transition-colors">

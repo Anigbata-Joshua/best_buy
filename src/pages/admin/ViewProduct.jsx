@@ -14,38 +14,57 @@ function ViewProduct() {
     const [showDelete, setShowDelete] = useState(false);
     const [idToDelete, setIdToDelete] = useState(null);
     const navigate = useNavigate();
-    const { merchantId } = React.useContext(DataContent); // Get merchantId from context
+    const { merchantId, loading: contextLoading } = React.useContext(DataContent); // Get merchantId from context
 
     useEffect(() => {
-        getAdminProducts();
-    }, []);
-
-    const getAdminProducts = async () => {
-        try {
-            const res = await axios.get(`${BASE_URL}/products`, {
-                params: {merchantId, limit: 100 }
-            });
-            const productData = res.data.data || res.data;
-            setProducts(productData);
-        } catch (err) {
-            console.error("Error fetching products", err);
-        } finally {
+        if (contextLoading) return;
+        if (!merchantId) {
+            setProducts([]);
             setLoading(false);
+            return;
         }
-    };
+
+        const getAdminProducts = async () => {
+            setLoading(true);
+            try {
+                const res = await axios.get(`${BASE_URL}/products`, {
+                    params: {
+                        merchant_id: merchantId,
+                        limit: 100
+                    }
+                });
+
+                const productData = res.data.data || res.data;
+                setProducts(productData);
+            } catch (err) {
+                console.error("Error fetching products", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        getAdminProducts();
+    }, [merchantId, contextLoading]); // Refetch products when merchantId becomes available
+
 
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${BASE_URL}/products/${id}`);
             // Remove from UI immediately
             setProducts(products.filter(prodts => prodts.id !== id));
+            toast.success("Product deleted successfully");
             setShowDelete(false);
         } catch (err) {
-            toast("Failed to delete product, Try again after sometime");
+            toast.error("Failed to delete product, Try again after sometime");
         }
     };
-
-    if (loading) return <div className="p-20 text-center animate-pulse text-gray-400">Loading products...</div>;
+ if (loading) {
+        return (
+            <div className="flex flex-col gap-4 justify-center items-center h-screen w-full bg-gray-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+                <p className="font-bold text-gray-500">Please wait, loading products...</p>
+            </div>
+        );
+    }
 
     return (
         <div className=" min-h-screen p-6 md:p-10 relative">

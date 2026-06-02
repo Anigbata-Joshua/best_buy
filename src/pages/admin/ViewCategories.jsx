@@ -4,20 +4,28 @@ import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { LuPlus, LuFolder, LuTrash2, LuLayoutGrid } from "react-icons/lu";
 import Swal from 'sweetalert2';
+import { DataContent } from '../../context/DataContext';
 
 function ViewCategory() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const { merchantId } = React.useContext(DataContent); // Get merchantId from context
+    const { merchantId, loading: contextLoading } = React.useContext(DataContent); // Get merchantId from context
 
     const BASE_URL = "http://ecommerce.reworkstaging.name.ng/v2";
     useEffect(() => {
+        if (contextLoading) return;
+        if (!merchantId) {
+            toast.error("Session expired. Please login.");
+            setLoading(false);
+            navigate("/login");
+            return;
+        }
+
         fetchCategories();
-    }, []);
+    }, [merchantId, contextLoading]);
 
     const fetchCategories = async () => {
-        const merchantId = localStorage.getItem("merchant_id");
 
         if (!merchantId) {
             toast.error("Session expired. Please login.");
@@ -54,29 +62,6 @@ function ViewCategory() {
             toast.error("Could not delete category.");
         }
     };
-
-
-    // const deleteCategory = async (id) => {
-    //     const result = await Swal.fire({
-    //         title: "Are you sure?",
-    //         text: "You won't be able to revert this!",
-    //         icon: "warning",
-    //         showCancelButton: true,
-    //         confirmButtonColor: "#2563eb", // Tailwind blue-600
-    //         cancelButtonColor: "#ef4444",  // Tailwind red-500
-    //         confirmButtonText: "Yes, delete it!"
-    //     });
-
-    //     if (result.isConfirmed) {
-    //         try {
-    //             await axios.delete(`${BASE_URL}/categories/${id}`);
-    //             Swal.fire("Deleted!", "Your category has been removed.", "success");
-    //             setCategories(categories.filter(cat => cat.id !== id));
-    //         } catch (err) {
-    //             Swal.fire("Error!", "Could not delete category.", "error");
-    //         }
-    //     }
-    // };
 
     return (
         <div className="min-h-screen bg-slate-50 p-6 md:p-10">

@@ -12,22 +12,25 @@ function ProductGrid() {
     const [error, setError] = useState(null);
 
     // Usecontext instead of localStorage 
-    const { merchantId } = useContext(DataContent);
+    const { merchantId, loading: contextLoading } = useContext(DataContent);
 
     // Re-run fetch
     useEffect(() => {
-        if(merchantId) {
-            fetchProducts();
+        if (contextLoading) return;
+        if (!merchantId) {
+            setProducts([]);
+            setLoading(false);
+            return;
         }
-    }, [merchantId]);
+
+        fetchProducts();
+    }, [merchantId, contextLoading]);
 
     const fetchProducts = async () => {
         setLoading(true);
         setError(null);
 
         try {
-            //Use the global ID from context
-
             if (!merchantId) {
                 toast.error("No merchant identity found!. Please log in.");
                 return;
@@ -40,11 +43,11 @@ function ProductGrid() {
                 }
             });
 
-            // Cleanly check both formats the API might return the array in
+            // Create a var to hold the entire response for debugging
             const rawData = response.data;
 
             const actualData = rawData.data;
-             console.log("API response for products:", actualData);
+             //console.log("API response for products:", actualData);
 
             const shopProducts = actualData.map((products) => ({
                 ...products,
@@ -80,7 +83,14 @@ function ProductGrid() {
     // Map through Categories safely using 'brand' property
     const categories = [...new Set(products.map(category_created => category_created.brand || "Uncategorized"))];
 
-    if (loading) return <div className="text-center mt-20 animate-pulse text-blue-600 font-bold">Loading Best Buy Deals...</div>;
+ if (loading) {
+        return (
+            <div className="flex flex-col gap-4 justify-center items-center h-screen w-full bg-gray-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+                <p className="font-bold text-gray-500">Loading Best Buy Deals...</p>
+            </div>
+        );
+    }
     if (error) return <div className="text-center mt-20 text-red-500 font-bold text-3xl">{error}</div>;
 
     return (
