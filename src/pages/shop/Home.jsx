@@ -16,34 +16,35 @@ function Home() {
             <Section1 />
             <Section2 />
 
-            {/* section3 */}
-            <section className="px-4">
-                <div className="w-[75%] flex flex-col md:flex-row mx-auto mt-3 bg-gray-100 justify-between p-6 md:p-8 border border-gray-300 rounded-xl shadow-sm gap-4">
-                    <div className="flex items-start md:items-center gap-3">
-                        <CgProfile className="mt-1 text-2xl shrink-0" />
-                        <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
-                            <p className="text-lg md:text-xl">
+            <section className="px-4 w-full md:w-[75%] mx-auto mt-6">
+
+                <div className="w-full flex flex-col lg:flex-row bg-gray-100 justify-between items-center p-5 sm:p-6 md:p-8 border border-gray-300 rounded-xl shadow-sm gap-6">
+                    <div className="flex gap-4 w-full lg:w-auto text-center lg:text-left flex-col sm:flex-row items-center sm:items-start">
+                        <CgProfile className="text-3xl text-gray-700 shrink-0 mt-0.5" />
+
+                        <div className="flex flex-col gap-2">
+                            <p className="text-base sm:text-lg md:text-xl font-medium text-gray-800 leading-relaxed">
                                 Sign in for free shipping*, recommendations, easy order tracking and more
                             </p>
-                            <div className="flex items-center gap-2">
-                                <p className="text-gray-500 text-sm whitespace-nowrap">*Exclusions apply.</p>
-                                <span className="hover:underline text-blue-600 cursor-pointer whitespace-nowrap">Learn more</span>
+                            <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 text-xs sm:text-sm">
+                                <p className="text-gray-500">*Exclusions apply.</p>
+                                <span className="hover:underline text-blue-600 cursor-pointer font-medium">Learn more</span>
                             </div>
                         </div>
                     </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                      <Link to="/loginUser">
-                        <button className="bg-[#0072DE] text-white py-2 px-6 rounded-lg cursor-pointer w-full md:w-auto font-semibold">
-                            Sign in
-                        </button>
-                      </Link>
-                      <Link to="/signup">
-                        <button className="bg-transparent text-black border border-black py-2 px-5 rounded-lg cursor-pointer w-full md:w-auto font-bold">
-                            Create account
-                        </button>
-                      </Link>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto justify-center shrink-0">
+                        <Link to="/loginUser" className="w-full sm:w-auto">
+                            <button className="bg-[#0072DE] hover:bg-[#005cb3] text-white py-2.5 px-6 rounded-lg cursor-pointer w-full font-semibold transition text-sm sm:text-base shadow-sm">
+                                Sign in
+                            </button>
+                        </Link>
+                        <Link to="/signup" className="w-full sm:w-auto">
+                            <button className="bg-white hover:bg-gray-50 text-black border border-gray-400 py-2.5 px-5 rounded-lg cursor-pointer w-full font-bold transition text-sm sm:text-base shadow-sm">
+                                Create account
+                            </button>
+                        </Link>
                     </div>
+
                 </div>
             </section>
 

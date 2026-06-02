@@ -97,31 +97,28 @@ function Product_section() {
                         <hr className="mb-6" />
 
                         <div className="mb-6">
-                            <span className="text-3xl font-bold">₦{numericPrice.toLocaleString()}</span>
+                            <span className="text-3xl font-bold">₦ {Math.round(numericPrice * 0.91).toLocaleString()}</span>
                             <div className="flex items-center gap-2 mt-1">
                                 <span className="bg-red-600 text-white text-[10px] font-bold px-1 py-0.5 rounded">Special Price</span>
-                                <span className="text-gray-500 text-xs line-through">₦{(numericPrice * 1.2).toLocaleString()}</span>
+                                <span className="text-gray-500 text-xs line-through">₦{(numericPrice).toLocaleString()}</span>
                             </div>
                         </div>
 
-                        <div className="">
+                        <div>
                             <button
                                 onClick={() => {
                                     const cart = JSON.parse(localStorage.getItem("cart")) || [];
                                     const existing = cart.find(item => item.id === product.id);
                                     if (existing) {
-                                        // existing.quantity += 1;
                                         toast.error("Product already added to cart. You can increase quantity instead")
                                     } else {
                                         cart.push({ ...product, quantity: 1 });
                                         toast.success("Added to cart!");
-
                                     }
                                     localStorage.setItem("cart", JSON.stringify(cart));
 
                                 }}
-                                className="w-full bg-yellow-300 text-black py-3 cursor-pointer mb-2 rounded-sm font-bold"
-                            >
+                                className="w-full bg-yellow-300 text-black py-3 cursor-pointer hover:bg-yellow-400 mb-2 rounded-sm font-bold">
                                 Add to cart
                             </button>
                             <p className="text-[11px] text-center mt-2 text-blue-600 hover:underline cursor-pointer font-medium">Available for Shipping & Store Pickup</p>
@@ -137,7 +134,7 @@ function Product_section() {
                             <div className="w-10 h-10 border border-black rounded flex items-center justify-center text-lg">📦</div>
                             <div>
                                 <p className="text-[11px] text-gray-500 uppercase font-bold">Category</p>
-                                <p className="font-bold">{product.category_name || "General"}</p>
+                                <p className="font-bold">{product.category?.name || "General"}</p>
                             </div>
                         </div>
                         <div className="flex items-start gap-3">

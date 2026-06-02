@@ -134,27 +134,32 @@ const Nav = () => {
                             <button className="absolute right-3 top-2 "><RiSearch2Line className='text-black text-xl' /></button>
                         </div>
 
-                        <div className="flex items-center gap-4 md:gap-6 text-xl pl-10 md:text-sm font-semibold shrink-0">
-                            <div className="hidden lg:flex items-center gap-2 cursor-pointer ">
-                                <div className="text-2xl"><SlPrinter /></div>
-                                <span className="text-[17px]">Hato Rey</span>
+                        <div className="flex items-center gap-4 md:gap-6 text-xl md:text-sm font-semibold shrink-0 ml-auto select-none">
+                            <div className="hidden lg:flex items-center gap-2 cursor-pointer text-gray-100 hover:text-yellow-300 transition-colors">
+                                <div className="text-2xl">
+                                    <SlPrinter />
+                                </div>
+                                <span className="text-[16px] font-medium">Hato Rey</span>
                             </div>
-                            <Link to="/cart">
-                                <div className="flex items-center gap-2 cursor-pointer group relative">
-                                    <div className="relative">
-                                        <BsCart3 className="text-2xl group-hover:text-yellow-300 transition-colors" />
+
+                            <Link to="/cart" className="focus:outline-none">
+                                <div className="flex items-center gap-2 cursor-pointer group relative py-1.5 px-2 rounded-lg hover:bg-white/10 transition-all">
+                                    <div className="relative flex items-center justify-center">
+                                        <BsCart3 className="text-2xl text-white group-hover:text-yellow-300 transition-colors" />
+
                                         {cartCount > 0 && (
-                                            <span className="absolute -top-2 -right-2 bg-yellow-400 text-[#0046be] text-[10px] font-black h-5 w-5 flex items-center justify-center rounded-full border-2 border-[#0046be] animate-in zoom-in duration-300">
+                                            <span className="absolute -top-1.5 -right-2 bg-yellow-400 text-[#0046be] text-[10px] font-extrabold h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center rounded-full border border-[#0046be] shadow-sm animate-in zoom-in duration-200">
                                                 {cartCount}
                                             </span>
                                         )}
                                     </div>
-
-                                    <span className="hidden md:inline text-[17px] group-hover:underline font-bold">
+                                    <span className="hidden md:inline text-[16px] text-white group-hover:text-yellow-300 transition-colors font-bold tracking-wide">
                                         Cart
                                     </span>
+
                                 </div>
                             </Link>
+
                         </div>
                     </div>
 
@@ -181,15 +186,15 @@ const Nav = () => {
                     <ul className="flex gap-6 font-medium shrink-0 ">
                         <div className="flex items-center gap-4">
                             {user ? (
-                            <Link to="/signup">
-                                <div className="flex items-center gap-2">
-                                    <CgProfile className="text-2xl" />
-                                    <span className="text-sm font-bold">
-                                        Welcome, {user.last_name}
-                                    </span>
-                                </div>
-                            </Link>
-                            ) :(
+                                <Link to="/signup">
+                                    <div className="flex items-center gap-2">
+                                        <CgProfile className="text-2xl" />
+                                        <span className="text-sm font-bold">
+                                            Welcome, {user.last_name}
+                                        </span>
+                                    </div>
+                                </Link>
+                            ) : (
                                 <Link to="/loginUser" className="flex items-center gap-2 hover:underline">
                                     <CgProfile className="text-2xl" />
                                     <span className="text-sm font-bold">Sign In</span>

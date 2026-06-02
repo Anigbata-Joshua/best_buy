@@ -52,7 +52,7 @@ const ProductCard = ({ product, onAddToCart }) => {
                         {/* Savings Badge */}
                         <div className="flex items-center gap-1 mt-1">
                             <span className="bg-[#bb0628] text-white text-[10px] font-bold px-1 py-0.5 uppercase">
-                                Save ₦{(numericPrice * 0.11).toLocaleString()}
+                                Save ₦{(numericPrice * 0.09).toLocaleString()}
                             </span>
                             <span className="text-[11px] text-gray-500 line-through">
                                 ₦{(numericPrice * 1.11).toLocaleString()}

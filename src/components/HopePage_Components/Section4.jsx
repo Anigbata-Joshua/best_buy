@@ -20,7 +20,7 @@ function Section4() {
     return (
         <div>
             <section className="w-full px-4 mt-8">
-                <div className="w-full lg:w-[75%] mx-auto flex flex-col lg:flex-row gap-6">
+                <div className="w-[75%] lg:w-[75%] mx-auto flex flex-col lg:flex-row gap-6">
                     <div className="img_div w-full lg:w-2/3 ">
                         <img src={extra} alt="MacBook" className=" object-contain rounded-2xl cursor-pointer" />
                     </div>
